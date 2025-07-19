@@ -1,4 +1,5 @@
 import base64
+from datetime import datetime, timezone
 import json
 import os
 from datetime import date
@@ -44,14 +45,14 @@ def get_sheets():
 
 def to_row(entry: dict) -> list:
     """Return columns in fixed order: exercise, weight, reps, sets, comment, date."""
-    today = date.today().isoformat()
+    now_iso = datetime.now(timezone.utc).astimezone().isoformat(timespec="seconds")
     return [
         entry.get("exercise", ""),
         entry.get("weight", ""),
         entry.get("reps", ""),
         entry.get("sets", ""),
         entry.get("comment", ""),
-        entry.get("date", today) or today,
+        entry.get("date", now_iso) or now_iso,
     ]
 
 
@@ -82,7 +83,7 @@ def log_workout():
     sheets = get_sheets()
     sheets.spreadsheets().values().append(
         spreadsheetId=sheet_id,
-        range="Sheet1!A1",              # adjust tab name if different
+        range="workouts!A1",              # adjust tab name if different
         valueInputOption="RAW",
         insertDataOption="INSERT_ROWS",
         body={"values": values},
