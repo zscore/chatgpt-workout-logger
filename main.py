@@ -10,6 +10,7 @@ import functions_framework                          # <-- required wrapper
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 
+API_KEY = os.environ.get("WORKOUT_KEY")  # set this at deploy time
 
 # ── lazy-init Google Sheets client ─────────────────────────────────
 _sheets = None
@@ -61,6 +62,10 @@ def log_workout(request):
 
     Responds: 200 {ok: true, rowsInserted: N}
     """
+    # --- API-key check -------------------------------
+    if API_KEY and request.headers.get("x-api-key") != API_KEY:
+        return ("Forbidden", 403)
+ 
     body = request.get_json(silent=True)
     if body is None:
         return jsonify(error="Expected application/json"), 400
