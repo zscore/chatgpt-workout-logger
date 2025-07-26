@@ -17,7 +17,8 @@ Example: https://docs.google.com/spreadsheets/d/1jqzNKE12vsp8WN8dwLg6uhk1t3_nRiM
 ```curl -X POST "$FUNC_URL/workout-entry" \
      -H "Content-Type: application/json" \
      -H "x-api-key: $WORKOUT_KEY" \
-     -d '{"exercise":"Bench Press","weight":90,"reps":5,"sets":3,"comment":"test call"}'```
+     -d '{"exercise":"Bench Press","weight":90,"reps":5,"sets":3,"comment":"test call"}'
+```
 8. Now we can configure the GPT. 
 You can fill out these fields:
 Name: Google Sheets Workout Logger
