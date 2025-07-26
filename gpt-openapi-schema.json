@@ -1,0 +1,82 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Workout Logger",
+    "version": "1.2"
+  },
+  "servers": [
+    {
+      "url": "https://workoutlogger-jyjqczoyba-ey.a.run.app"
+    }
+  ],
+  "paths": {
+    "/workout-entry": {
+      "post": {
+        "operationId": "logWorkout",
+        "summary": "Append a workout row to Google Sheet",
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkoutEntry"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key"
+      }
+    },
+    "schemas": {
+      "WorkoutEntry": {
+        "type": "object",
+        "properties": {
+          "exercise": {
+            "type": "string"
+          },
+          "weight": {
+            "type": "number",
+            "format": "float"
+          },
+          "reps": {
+            "type": "integer"
+          },
+          "sets": {
+            "type": "integer"
+          },
+          "comment": {
+            "type": "string"
+          },
+          "datetime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "exercise",
+          "weight",
+          "reps",
+          "sets"
+        ]
+      }
+    }
+  }
+}
