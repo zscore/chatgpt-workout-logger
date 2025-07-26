@@ -6,12 +6,27 @@ This repo uses google cloud functions and the API interface to Google Sheets to 
 Example: https://docs.google.com/spreadsheets/d/1jqzNKE12vsp8WN8dwLg6uhk1t3_nRiMpeiWGK8CptwM/edit?usp=sharing
 2. Then, we need to enable the google sheets API in google cloud.
 3. Create a service account and download its json credentials.
-4. In the sheets Share dialog, you should add the service account as an editor. You can test this by running the following curl command:
-``` 
-
-```
+4. In the sheets Share dialog, you should add the service account as an editor.
 5. You need to locally generate an API key with a command like this `openssl rand -base64 32 | tr -d '=+/[:space:]'` and add this to the environemnt variable WORKOUT_KEY
 6. You should find the sheets id and export the json key as base 64 into the environment variables SA_KEY_JSON and SHEET_ID, which you can find by looking at the URl of your google sheet. In the above case, it should be 1jqzNKE12vsp8WN8dwLg6uhk1t3_nRiMpeiWGK8CptwM. You can then run the command in the deploy script to deploy the cloud function which will deploy the main.py flask app. 
+
+If you want to test the function locally, you can do it like this
+```
+python -m venv venv
+source venv/bin/activate               # Windows: venv\Scripts\activate
+
+# install deps (make sure functions-framework is in requirements.txt)
+pip install -r requirements.txt
+
+
+python -m functions_framework --target=log_workout --port=8080
+
+curl -X POST http://127.0.0.1:8080/workout-entry \
+     -H "x-api-key: $WORKOUT_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{"exercise":"Test Curl","weight":42,"reps":10,"sets":3,"comment":"local run"}'
+
+```
 7. Then, once you get the URL from the cloud run function, you can test it with the following command and check to see if a row is appended to the google sheet.
 
 ```curl -X POST "$FUNC_URL/workout-entry" \
